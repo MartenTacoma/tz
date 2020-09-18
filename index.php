@@ -8,7 +8,7 @@ ini_set('display_errors', 'on');
  * Set night start and end as desired
  * Set timestep in hours as desired
  * 
- * Run from a php capable web server, access with tz.php[?d=YYYY-mm-dd], if d parameter is ommitted table is shown for current date (server date)
+ * Run from a php capable web server, access with index.php[?d=YYYY-mm-dd], if d parameter is ommitted table is shown for current date (server date)
  */
 
 $zones = [
@@ -103,5 +103,5 @@ for($opt=0;$opt<24;$opt+=$timestep){
 }
 echo '</tbody></table>';
 ?>
-<a href="https://github.com/MartenTacoma/random_stuff/blob/master/tz.php"><img src="github.png" alt="Fork me on github" title="Fork me on github"/></a>
+<a href="https://github.com/MartenTacoma/tz"><img src="github.png" alt="Fork me on github" title="Fork me on github"/></a>
 </body></html>
