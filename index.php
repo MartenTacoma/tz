@@ -16,6 +16,7 @@ $zones = [
     'UK'=>'Europe/London',
     'America East'=>'America/New_york',
     'America West'=>'America/Los_Angeles',
+    'Christchurch'=>'Pacific/Auckland',
     'Hobart'=>'Australia/Hobart',
     'Tokyo'=>'Asia/Tokyo',
     'India'=>'Asia/Kolkata'
@@ -25,11 +26,29 @@ $zones = [
 $night_start = '24:00';//(currently no later than midnight please after substracting event_length)
 $night_end = '7:00';
 $timestep = '1:00';
-$event_length = '2:30';// (will be substracted from night_start for coloring night boxes)
+$event_length = '1:00';// (will be substracted from night_start for coloring night boxes)
 
 /* No editing below this line please */
 
+function time_to_minutes($time){
+    if(strpos($time, ':') !== false){
+        list($hour,$minutes) = explode(':', $time);
+        return $hour*60+$minutes;
+    } else {
+        return $time;
+    }
+}
+
+function minutes_to_time($minutes){
+    $hour = floor($minutes/60);
+    $minutes = $minutes % 60;
+    return sprintf("%'.02d:%'.02d", $hour, $minutes);
+}
+
+$event_length = minutes_to_time(time_to_minutes($_GET['l'] ?? $event_length));//make sure time is double digits
 $d = $_GET['d'] ?? date('Y-m-d');
+$night_start = minutes_to_time(time_to_minutes($night_start)-time_to_minutes($event_length));
+$timestep = time_to_minutes($timestep)/60;
 
 ?>
 
@@ -50,28 +69,12 @@ tr:nth-child(odd){
 }
 </style>
 <head><body>
+<h1>Time Zone Table - <?=$d?></h1>
+<form method="get" action="<?=strtok($_SERVER['REQUEST_URI'], '?')?>">Date: <input type="date" name="d" value="<?=$d?>" /> Event length: <input type="time" name="l" value="<?=$event_length?>"/> <input type="submit" value="submit" /></form>
+
+<table><thead><tr><th>UTC</th>
+
 <?php
-
-function time_to_minutes($time){
-    if(strpos($time, ':') !== false){
-        list($hour,$minutes) = explode(':', $time);
-        return $hour*60+$minutes;
-    } else {
-        return $time;
-    }
-}
-
-function minutes_to_time($minutes){
-    $hour = floor($minutes/60);
-    $minutes = $minutes % 60;
-    return $hour.':'.$minutes;
-}
-
-$night_start = minutes_to_time(time_to_minutes($night_start)-time_to_minutes($event_length));
-$timestep = time_to_minutes($timestep)/60;
-
-echo '<h1>Time Zone Table - '.$d.'</h1>';
-echo '<table><thead><tr><th>UTC</th>';
 foreach($zones as $zone=>$id){
     echo '<th>'.$zone.'</th>';
 }
