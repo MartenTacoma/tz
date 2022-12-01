@@ -61,14 +61,28 @@ td, th {
     padding: 1px 5px;
 }
 td.night {
-    background: #666;
+    background-color: rgba(0,0,0,0.5);
     color: white;
 }
 tr:nth-child(odd){
     background-color: #ddd;
 }
+tr:nth-child(odd) td.night {
+    background-color: rgba(0,0,0,0.6);
+}
+
+tr.marked {
+    background-color: yellow;
+}
 </style>
-<head><body>
+
+<script type="text/javascript">
+    function toggleClass(em){
+        var element = document.getElementById(em);
+        element.classList.toggle('marked');
+    }
+</script>
+</head><body>
 <h1>Time Zone Table - <?=$d?></h1>
 <form method="get" action="<?=strtok($_SERVER['REQUEST_URI'], '?')?>">Date: <input type="date" name="d" value="<?=$d?>" /> Event length: <input type="time" name="l" value="<?=$event_length?>"/> <input type="submit" value="submit" /></form>
 
@@ -88,7 +102,7 @@ for($opt=0;$opt<24;$opt+=$timestep){
     }
     $t = new DateTime($d.' '.$ts, new DateTimeZone('UTC'));
     $d = $t->format('Ymd');
-    echo '<tr><th>'.$t->format('H:i').'</th>';
+    echo '<tr id="'.$t->format('Hi').'" onclick="toggleClass(\''.$t->format('Hi').'\')"><th>'.$t->format('H:i').'</th>';
     foreach($zones as $zone=>$id){
         $t->setTimezone(new DateTimeZone($id));
         $dt = $t->format('Ymd');
