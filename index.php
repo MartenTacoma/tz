@@ -72,7 +72,10 @@ tr:nth-child(odd) td.night {
 }
 
 tr.marked {
-    background-color: yellow;
+    background-color: #ffff00;
+}
+tr:nth-child(odd).marked {
+    background-color: #00ff00;
 }
 </style>
 
